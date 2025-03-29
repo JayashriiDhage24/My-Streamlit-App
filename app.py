@@ -76,10 +76,13 @@ df['kmeans_cluster'] = kmeans.fit_predict(pc_data)
 st.write("## 📈 Data Visualizations")
 
 # Income Distribution
+# Income Distribution - Fix Scaling Issues
 st.write("### Income Distribution")
 fig, ax = plt.subplots()
-sns.histplot(df["Income"], bins=30, kde=True, ax=ax)
+sns.histplot(df["Income"], bins=50, kde=True, ax=ax)  # 30 → 50 bins for better distribution
+ax.set_xlim(df["Income"].min(), df["Income"].max())  # Ensure the full range is visible
 st.pyplot(fig)
+
 
 # Education Count Plot
 st.write("### Education Count")
