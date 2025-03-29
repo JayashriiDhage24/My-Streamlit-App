@@ -38,7 +38,19 @@ scaler = MinMaxScaler()
 df[features_to_scale] = scaler.fit_transform(df[features_to_scale])
 
 # Convert Date Column
-df['Dt_Customer'] = pd.to_datetime(df['Dt_Customer']).apply(lambda date: date.toordinal())
+# Convert 'Dt_Customer' while handling errors
+df['Dt_Customer'] = pd.to_datetime(df['Dt_Customer'], errors='coerce')
+
+# Check if there are any NaT (missing) values after conversion
+if df['Dt_Customer'].isna().sum() > 0:
+    st.write("⚠️ Warning: Some dates could not be converted and will be replaced with the median date.")
+
+# Fill missing dates with median
+df['Dt_Customer'].fillna(df['Dt_Customer'].median(), inplace=True)
+
+# Convert to ordinal format
+df['Dt_Customer'] = df['Dt_Customer'].apply(lambda date: date.toordinal())
+
 
 # PCA
 pca = PCA()
