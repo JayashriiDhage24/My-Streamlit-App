@@ -3,8 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-url = "https://raw.githubusercontent.com/JayashriiDhage24/My-Streamlit-App/main/marketing_campaign1.xlsx"
-df = pd.read_excel(url)
+url = "https://raw.githubusercontent.com/JayashriiDhage24/My-Streamlit-App/main/marketing_campaign1.csv"
+df = pd.read_csv(url)
+
+
 
 df.head()
 
