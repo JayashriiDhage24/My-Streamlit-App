@@ -3,7 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df=pd.read_excel('marketing_campaign1.xlsx')
+url = "https://raw.githubusercontent.com/JayashriiDhage24/My-Streamlit-App/main/marketing_campaign1.xlsx"
+df = pd.read_excel(url)
+
 df.head()
 
 import warnings
