@@ -72,17 +72,19 @@ k_pca = 4
 kmeans = KMeans(n_clusters=k_pca, random_state=0, n_init=10)
 df['kmeans_cluster'] = kmeans.fit_predict(pc_data)
 
+# Compute Silhouette Score for K-Means
+silhouette_avg_kmeans = silhouette_score(pc_data, df['kmeans_cluster'])
+st.write(f"Silhouette Score (K-Means): {silhouette_avg_kmeans:.2f}")
+
 # **🎨 VISUALIZATIONS**
 st.write("## 📈 Data Visualizations")
 
 # Income Distribution
-# Income Distribution - Fix Scaling Issues
 st.write("### Income Distribution")
 fig, ax = plt.subplots()
-sns.histplot(df["Income"], bins=50, kde=True, ax=ax)  # 30 → 50 bins for better distribution
-ax.set_xlim(df["Income"].min(), df["Income"].max())  # Ensure the full range is visible
+sns.histplot(df["Income"], bins=50, kde=True, ax=ax)
+ax.set_xlim(df["Income"].min(), df["Income"].max())
 st.pyplot(fig)
-
 
 # Education Count Plot
 st.write("### Education Count")
@@ -122,6 +124,14 @@ st.write("### DBSCAN Clustering")
 
 dbscan = DBSCAN(eps=0.5, min_samples=5)
 df['dbscan_cluster'] = dbscan.fit_predict(df[existing_features])
+
+# Remove noise points (-1) for Silhouette Score
+valid_labels = df['dbscan_cluster'][df['dbscan_cluster'] != -1]
+if len(set(valid_labels)) > 1:
+    silhouette_avg_dbscan = silhouette_score(df[existing_features][df['dbscan_cluster'] != -1], valid_labels)
+    st.write(f"Silhouette Score (DBSCAN): {silhouette_avg_dbscan:.2f}")
+else:
+    st.write("Silhouette Score (DBSCAN) cannot be computed due to too few clusters.")
 
 fig, ax = plt.subplots()
 scatter = ax.scatter(df[existing_features[0]], df[existing_features[1]], c=df['dbscan_cluster'], cmap='rainbow')
